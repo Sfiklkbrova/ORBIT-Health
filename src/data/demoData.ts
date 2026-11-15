@@ -1,0 +1,158 @@
+import { COLORS } from '../theme/colors';
+import { VitalMetric, HealthStatusData, AiInsightData, HistoryItem } from '../types/health';
+
+export const DEMO_VITALS: VitalMetric[] = [
+  {
+    id: 'heart_rate',
+    name: 'Heart Rate',
+    value: '72',
+    unit: 'BPM',
+    status: 'Optimal',
+    iconName: 'heart-pulse',
+    accentColor: COLORS.heartRate,
+    subtext: 'Resting pulse normal',
+    isSample: true,
+    trend: 'stable',
+    changeText: 'Normal range (60-100)',
+  },
+  {
+    id: 'blood_oxygen',
+    name: 'Blood Oxygen',
+    value: '98',
+    unit: '%',
+    status: 'Optimal',
+    iconName: 'water-percent',
+    accentColor: COLORS.bloodOxygen,
+    subtext: 'SpO2 level high',
+    isSample: true,
+    trend: 'stable',
+    changeText: 'Healthy threshold (>95%)',
+  },
+  {
+    id: 'blood_pressure',
+    name: 'Blood Pressure',
+    value: '120/80',
+    unit: 'mmHg',
+    status: 'Normal',
+    iconName: 'chart-bell-curve-cumulative',
+    accentColor: COLORS.bloodPressure,
+    subtext: 'Systolic & Diastolic',
+    isSample: true,
+    trend: 'stable',
+    changeText: 'Standard optimal',
+  },
+  {
+    id: 'body_temperature',
+    name: 'Body Temperature',
+    value: '36.6',
+    unit: '°C',
+    status: 'Normal',
+    iconName: 'thermometer',
+    accentColor: COLORS.temperature,
+    subtext: 'Core normothermia',
+    isSample: true,
+    trend: 'stable',
+    changeText: 'Normal baseline',
+  },
+  {
+    id: 'sleep_duration',
+    name: 'Sleep',
+    value: '8',
+    unit: 'hours',
+    status: 'Optimal',
+    iconName: 'moon-waning-crescent',
+    accentColor: COLORS.sleep,
+    subtext: 'Deep sleep 2.4h',
+    isSample: true,
+    trend: 'up',
+    changeText: '+45 min vs yesterday',
+  },
+  {
+    id: 'daily_activity',
+    name: 'Daily Activity',
+    value: '7,500',
+    unit: 'steps',
+    status: 'Good',
+    iconName: 'shoe-print',
+    accentColor: COLORS.activity,
+    subtext: 'Goal: 10,000 steps',
+    isSample: true,
+    trend: 'up',
+    changeText: '75% of target',
+  },
+];
+
+export const DEMO_HEALTH_STATUS: HealthStatusData = {
+  vitalScore: 96,
+  statusText: 'ORBIT TELEMETRY: OPTIMAL',
+  missionDay: 142,
+  systemCheck: 'Optimal',
+  activity: {
+    steps: 7500,
+    goalSteps: 10000,
+    calories: 520,
+    activeMinutes: 58,
+    distanceKm: 5.6,
+  },
+};
+
+export const DEMO_AI_INSIGHT: AiInsightData = {
+  title: 'AI Health Insights',
+  timestamp: 'Analysis refreshed 12m ago',
+  sampleBadge: 'SAMPLE AI ANALYSIS',
+  summary:
+    'Cardiovascular equilibrium and oxygenation are operating within target parameters. Night-cycle circadian recovery was 14% deeper than your mission baseline.',
+  keyPoints: [
+    { label: 'Cardio Stability', value: 'Nominal (72 BPM)', status: 'optimal' },
+    { label: 'Tissue Oxygenation', value: '98% Saturation', status: 'optimal' },
+    { label: 'Circadian Sync', value: '8.0h Restored', status: 'optimal' },
+    { label: 'Metabolic Output', value: '7,500 Steps logged', status: 'normal' },
+  ],
+  detailedAnalysis:
+    'Telemetry diagnostic confirms synchronized autonomic nervous balance. Heart rate variability (HRV) indicates high recovery readiness. Core temperature (36.6°C) demonstrates stable metabolic regulation. Daily movement trend shows consistent cardiovascular endurance under nominal gravity conditions.',
+  recommendations: [
+    'Complete the remaining 2,500 steps to reach the 10,000 step milestone.',
+    'Hydration telemetry: drink 500ml water before the evening cycle.',
+    'Maintain consistent sleep schedule for sustained REM cycle depth.',
+  ],
+};
+
+export const DEMO_HISTORY: HistoryItem[] = [
+  {
+    id: 'hist_1',
+    date: 'Today, Nov 14',
+    time: '12:30 PM',
+    title: 'Midday Orbital Sync',
+    vitalScore: 96,
+    metrics: { hr: '72 BPM', spo2: '98%', bp: '120/80', temp: '36.6°C' },
+    notes: 'All vital telemetry parameters stable. Normal physiological readiness.',
+  },
+  {
+    id: 'hist_2',
+    date: 'Yesterday, Nov 13',
+    time: '08:15 AM',
+    title: 'Morning Baseline Telemetry',
+    vitalScore: 94,
+    metrics: { hr: '74 BPM', spo2: '97%', bp: '122/82', temp: '36.7°C' },
+    notes: 'Post-rest telemetry logged. Sleep duration 7.2 hours.',
+  },
+  {
+    id: 'hist_3',
+    date: 'Nov 12, 2026',
+    time: '09:00 PM',
+    title: 'Evening Mission Debrief',
+    vitalScore: 95,
+    metrics: { hr: '70 BPM', spo2: '98%', bp: '118/78', temp: '36.5°C' },
+    notes: 'Completed 10,240 steps. Resting heart rate optimal.',
+  },
+  {
+    id: 'hist_4',
+    date: 'Nov 11, 2026',
+    time: '02:45 PM',
+    title: 'Mid-Cycle Checkup',
+    vitalScore: 93,
+    metrics: { hr: '76 BPM', spo2: '98%', bp: '124/82', temp: '36.8°C' },
+    notes: 'Mild physical exertion telemetry recorded during active exercise.',
+  },
+];
+
