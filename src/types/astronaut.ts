@@ -168,5 +168,7 @@ export type MainNavTab =
   | 'nasa'
   | 'profile'
   | 'beyond_space'
-  | 'about';
+  | 'about'
+  | 'sans'
+  | 'behavioral';
 

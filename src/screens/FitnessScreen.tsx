@@ -17,6 +17,7 @@ import {
   getExerciseSessions,
   logNewExerciseSession,
   calculateFitnessAndRecovery,
+  deleteExerciseSession,
   ExerciseSessionLog,
 } from '../services/fitnessService';
 
@@ -66,6 +67,25 @@ export const FitnessScreen: React.FC<FitnessScreenProps> = ({ onNavigateTab }) =
     setIsLogModalVisible(false);
     setSessionNotes('');
     Alert.alert(t('common.success'), t('fitness.sessionLogged'));
+  };
+
+  const handleDeleteSession = (id: string) => {
+    Alert.alert(
+      t('common.confirm', 'Məşq qeydini sil'),
+      t('fitness.deleteConfirm', 'Bu məşq qeydini silmək istədiyinizə əminsiniz?'),
+      [
+        { text: t('common.cancel', 'Ləğv et'), style: 'cancel' },
+        {
+          text: t('common.delete', 'Sil'),
+          style: 'destructive',
+          onPress: () => {
+            deleteExerciseSession(id);
+            setSessions(getExerciseSessions());
+            setAnalysis(calculateFitnessAndRecovery());
+          },
+        },
+      ]
+    );
   };
 
   const getDeviceIcon = (type: SpaceExerciseType): keyof typeof MaterialCommunityIcons.glyphMap => {
@@ -178,8 +198,17 @@ export const FitnessScreen: React.FC<FitnessScreenProps> = ({ onNavigateTab }) =
                   </Text>
                 </View>
               </View>
-              <View style={styles.intensityBadge}>
-                <Text style={styles.intensityText}>{s.intensity}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={styles.intensityBadge}>
+                  <Text style={styles.intensityText}>{s.intensity}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleDeleteSession(s.id)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  activeOpacity={0.7}
+                >
+                  <MaterialCommunityIcons name="trash-can-outline" size={18} color={COLORS.textMuted} />
+                </TouchableOpacity>
               </View>
             </View>
 

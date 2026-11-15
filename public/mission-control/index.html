@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NASA MCC Houston • Flight Surgeon Console (ORBIT Health)</title>
+  <style>
+    :root {
+      --bg: #070B14;
+      --card-bg: #0F172A;
+      --card-border: #1E293B;
+      --accent: #2563EB;
+      --cyan: #38BDF8;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --success: #10B981;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #0B132B;
+      border-bottom: 1px solid var(--card-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nasa-meatball {
+      width: 40px;
+      height: 40px;
+      background: #E11D48;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #FFF;
+      box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+    }
+    .logo-text h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #FFF;
+    }
+    .logo-text p {
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.5px;
+    }
+    .comms-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+    .status-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .status-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .status-val {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+    .latency-pill {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--warning);
+      color: var(--warning);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--warning);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--warning);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+    @media (max-width: 992px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+    .telemetry-tile {
+      background: #0B132B;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .telemetry-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .telemetry-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #FFF;
+    }
+    .telemetry-unit {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 2px;
+    }
+    .telemetry-delta {
+      font-size: 0.7rem;
+      margin-top: 4px;
+      color: var(--success);
+      font-weight: 600;
+    }
+    .telemetry-delta.warning {
+      color: var(--warning);
+    }
+    .terminal-box {
+      background: #020617;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.8rem;
+      color: #10B981;
+      height: 240px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    .terminal-line {
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .terminal-line.info { color: #38BDF8; }
+    .terminal-line.warn { color: #F59E0B; }
+    .terminal-line.tx { color: #A78BFA; }
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="text"] {
+      flex: 1;
+      background: #0B132B;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #FFF;
+      font-size: 0.85rem;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--cyan);
+    }
+    button.send-btn {
+      background: var(--accent);
+      color: #FFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button.send-btn:hover {
+      background: #1D4ED8;
+    }
+    .timeline-node {
+      border-left: 2px solid var(--card-border);
+      padding-left: 1rem;
+      margin-left: 0.5rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .timeline-node::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 2px;
+      width: 10px;
+      height: 10px;
+      background: var(--cyan);
+      border-radius: 50%;
+    }
+    .timeline-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+    .timeline-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-group">
+      <div class="nasa-meatball">NASA</div>
+      <div class="logo-text">
+        <h1>MISSION CONTROL CENTER • HOUSTON</h1>
+        <p>B30 / FLIGHT SURGEON CONSOLE • ORBIT HEALTH TELEMETRY BRIDGE</p>
+      </div>
+    </div>
+
+    <div class="comms-status-bar">
+      <div class="status-item">
+        <span class="status-label">TARGET SPACECRAFT</span>
+        <span class="status-val">Artemis Mars-1 Transit (Hab-1)</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">CREW OFFICER</span>
+        <span class="status-val">Astronaut Aysel (Day 214 / 500)</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">DSN LINK</span>
+        <span class="status-val">Madrid DSS-63 (Ka-Band 32 GHz)</span>
+      </div>
+      <div class="latency-pill">
+        <div class="pulse-dot"></div>
+        <span>18m 42s ONE-WAY DELAY</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- LEFT COLUMN: LIVE TELEMETRY & DONKI SPACE WEATHER -->
+    <section>
+      <!-- Telemetry Grid -->
+      <div class="card">
+        <div class="card-title">
+          <span>ASTRONAUT AYSEL • INCOMING BIO-TELEMETRY (LAST DSN PACKET)</span>
+          <span class="badge">SQLite Grounded • Sovereign RLS</span>
+        </div>
+        <div class="telemetry-grid">
+          <div class="telemetry-tile">
+            <span class="telemetry-label">RESTING HEART RATE</span>
+            <div><span class="telemetry-num" id="hr-val">72</span><span class="telemetry-unit">BPM</span></div>
+            <span class="telemetry-delta">+6 BPM vs Baseline (66)</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">BLOOD OXYGEN (SPO2)</span>
+            <div><span class="telemetry-num" id="spo2-val">98</span><span class="telemetry-unit">%</span></div>
+            <span class="telemetry-delta">Nominal Envelope</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">BLOOD PRESSURE</span>
+            <div><span class="telemetry-num" id="bp-val">120/80</span><span class="telemetry-unit">mmHg</span></div>
+            <span class="telemetry-delta">Cephalad Shift Adaptive</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">CORE TEMPERATURE</span>
+            <div><span class="telemetry-num" id="temp-val">36.6</span><span class="telemetry-unit">°C</span></div>
+            <span class="telemetry-delta">Thermoregulatory Baseline</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">CUMULATIVE DOSE</span>
+            <div><span class="telemetry-num" id="rad-val">178.4</span><span class="telemetry-unit">mSv</span></div>
+            <span class="telemetry-delta warning">29.7% of 600 mSv Cap</span>
+          </div>
+          <div class="telemetry-tile">
+            <span class="telemetry-label">LAST SLEEP</span>
+            <div><span class="telemetry-num" id="sleep-val">8.0</span><span class="telemetry-unit">hrs</span></div>
+            <span class="telemetry-delta">Zero Acute Sleep Debt</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Solar Storm & DONKI Advisory -->
+      <div class="card">
+        <div class="card-title">
+          <span>NASA DONKI SPACE WEATHER ALERT • CME & SOLAR FLARE WATCH</span>
+          <span class="badge" style="color: var(--warning); border-color: var(--warning);">MONITORED</span>
+        </div>
+        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <h4 style="color: var(--warning); font-size: 0.9rem; margin-bottom: 4px;">ACTIVE CORONAL MASS EJECTION (CME) ADVISORY</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            NASA DONKI Enlil Solar Wind model predicts high-energy proton flux arrival at the Mars-1 transit coordinate within 14 hours. Autonomous crew protocol instructs relocation to Node 2 water-wall shelter and deferral of planned EVAs.
+          </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); font-style: italic;">
+          Flight Surgeon Note: Under current 18.7-minute one-way light delay, Astronaut Aysel must rely entirely on ORBIT Health on-board local decision support for immediate shelter decisions.
+        </p>
+      </div>
+
+      <!-- Flight Surgeon Directive Dispatcher -->
+      <div class="card">
+        <div class="card-title">
+          <span>TRANSMIT DELAYED DIRECTIVE TO ARTEMIS MARS-1</span>
+          <span class="badge">Ka-Band Ka-1 Uplink</span>
+        </div>
+        <div class="terminal-box" id="terminal">
+          <div class="terminal-line info">[14:22:04 UTC] DSN Madrid DSS-63 carrier locked on Artemis Mars-1 Hab-1.</div>
+          <div class="terminal-line info">[14:22:18 UTC] Telemetry stream synchronized. Latency: 18m 42s.</div>
+          <div class="terminal-line">[14:23:01 UTC] Astronaut Aysel autonomous protocol: Node 2 shelter protocol active.</div>
+          <div class="terminal-line warn">[14:23:45 UTC] SANS visual acuity check logged: 20/30 (+0.85 D hyperopic shift).</div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="directive-input" placeholder="Type Flight Surgeon directive (e.g., Prescribe 2h LBNP Chibis suit)...">
+          <button class="send-btn" onclick="sendDirective()">Queue Uplink (T+18m)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN: COMMS TIMELINE & MISSION STATUS -->
+    <aside>
+      <div class="card">
+        <div class="card-title">
+          <span>MARS-EARTH DELAY LOG</span>
+          <span class="badge">Light Speed c = 300,000 km/s</span>
+        </div>
+        <div class="timeline-node">
+          <span class="timeline-time">T - 37m 24s</span>
+          <p class="timeline-text">Astronaut Aysel sent bio-telemetry packet from Deep Space Hab-1.</p>
+        </div>
+        <div class="timeline-node">
+          <span class="timeline-time">T - 18m 42s</span>
+          <p class="timeline-text">Light cone propagation across 2.24 &times; 10<sup>8</sup> km interplanetary void.</p>
+        </div>
+        <div class="timeline-node">
+          <span class="timeline-time">NOW (T - 0m)</span>
+          <p class="timeline-text">Packet received at Houston B30 Console. Flight Surgeon reviewing.</p>
+        </div>
+        <div class="timeline-node" style="border-left-color: var(--warning);">
+          <span class="timeline-time" style="color: var(--warning);">EST. ARRIVAL T + 18m 42s</span>
+          <p class="timeline-text">Uplink command will reach Astronaut Aysel at approx 15:01 UTC.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>FLIGHT SURGEON ON DUTY</span>
+        </div>
+        <p style="font-size: 0.85rem; font-weight: 700; color: #FFF;">Dr. Elena Rostova, MD</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Chief Flight Surgeon • Artemis Mars-1 Expedition</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 10px; line-height: 1.4;">
+          NASA Space Apps 2026 Challenge: Space Biology Beyond Earth: Autonomous Health Monitoring & Medical Decision Support for Deep Space Missions.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    function sendDirective() {
+      const input = document.getElementById('directive-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const term = document.getElementById('terminal');
+      const now = new Date();
+      const timeStr = now.toISOString().slice(11, 19) + ' UTC';
+
+      const line = document.createElement('div');
+      line.className = 'terminal-line tx';
+      line.innerText = `[${timeStr}] [TX UPLINK QUEUED] Dr. Elena Rostova: "${text}" (Est. Delivery in 18m 42s)`;
+      term.appendChild(line);
+
+      input.value = '';
+      term.scrollTop = term.scrollHeight;
+
+      // Simulated acknowledgment after delay
+      setTimeout(() => {
+        const ackLine = document.createElement('div');
+        ackLine.className = 'terminal-line info';
+        ackLine.innerText = `[${new Date().toISOString().slice(11, 19)} UTC] [DSN DUMP] Madrid DSS-63 uplink carrier modulated.`;
+        term.appendChild(ackLine);
+        term.scrollTop = term.scrollHeight;
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

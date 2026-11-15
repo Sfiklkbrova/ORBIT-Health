@@ -23,6 +23,9 @@ import { ProfileScreen } from './src/screens/ProfileScreen';
 import { BeyondSpaceScreen } from './src/screens/BeyondSpaceScreen';
 import { AboutDataMethodsScreen } from './src/screens/AboutDataMethodsScreen';
 import { MissionControlScreen } from './src/screens/MissionControlScreen';
+import { SansVisionCheckScreen } from './src/screens/SansVisionCheckScreen';
+import { BehavioralCheckinScreen } from './src/screens/BehavioralCheckinScreen';
+import { VoiceConversationScreen } from './src/screens/VoiceConversationScreen';
 import { ErrorBoundary } from './src/components/ErrorBoundary';
 import { BottomNavBar } from './src/components/BottomNavBar';
 import { SpaceBackground } from './src/components/SpaceBackground';
@@ -148,6 +151,12 @@ export default function App() {
         return <AboutDataMethodsScreen onBack={() => setCurrentTab('dashboard')} />;
       case 'control':
         return <MissionControlScreen onNavigateTab={(tab) => setCurrentTab(tab)} />;
+      case 'voice':
+        return <VoiceConversationScreen onNavigateTab={(tab) => setCurrentTab(tab)} onClose={() => setCurrentTab('assistant')} />;
+      case 'sans':
+        return <SansVisionCheckScreen onNavigateTab={(tab) => setCurrentTab(tab)} onBack={() => setCurrentTab('health')} />;
+      case 'behavioral':
+        return <BehavioralCheckinScreen onNavigateTab={(tab) => setCurrentTab(tab)} onBack={() => setCurrentTab('health')} />;
       default:
         return <DashboardScreen onNavigateTab={(tab) => setCurrentTab(tab)} />;
     }
@@ -183,6 +192,7 @@ export default function App() {
           <WelcomeScreen
             onNavigateToLogin={() => setAuthStep('LOGIN')}
             onNavigateToRegister={() => setAuthStep('REGISTER')}
+            onContinueAsGuest={() => setAuthStep('AUTHENTICATED')}
           />
         </SafeAreaView>
       </SafeAreaProvider>

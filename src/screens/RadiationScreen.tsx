@@ -19,6 +19,7 @@ import { triggerHealthAlert } from '../services/notificationService';
 import { CosmicRadiation3D } from '../components/3d/CosmicRadiation3D';
 import { DataSourceBadge } from '../components/DataSourceBadge';
 import { fetchNasaDonkiSpaceWeather } from '../services/nasa/donkiService';
+import { SolarEventAdvisorCard } from '../components/SolarEventAdvisorCard';
 
 interface RadiationScreenProps {
   onNavigateTab?: (tab: MainNavTab) => void;
@@ -35,6 +36,7 @@ export const RadiationScreen: React.FC<RadiationScreenProps> = ({ onNavigateTab 
   const [isSyncingDonki, setIsSyncingDonki] = useState<boolean>(false);
   const [donkiSourceType, setDonkiSourceType] = useState<'NASA_LIVE' | 'NASA_CACHED'>('NASA_CACHED');
   const [lastDonkiSyncTime, setLastDonkiSyncTime] = useState<string | null>(null);
+  const [isSimulatedSolarEvent, setIsSimulatedSolarEvent] = useState<boolean>(false);
 
   // Current Radiation telemetry data state (DEMO DATA)
   const [radData, setRadData] = useState<RadiationData>({
@@ -410,6 +412,14 @@ export const RadiationScreen: React.FC<RadiationScreenProps> = ({ onNavigateTab 
           </View>
         ))}
       </View>
+
+      {/* Solar Storm Shelter Advisor Card */}
+      <SolarEventAdvisorCard
+        activeDonkiEvents={donkiEvents}
+        isSimulatedActive={isSimulatedSolarEvent}
+        onToggleSimulateEvent={(active) => setIsSimulatedSolarEvent(active)}
+        cumulativeDoseMsv={radData.cumulativeMissionExposureMilliSv}
+      />
 
       {/* SECTION 5: NASA DONKI SPACE WEATHER ALERT SYSTEM */}
       <View style={styles.nasaSectionHeader}>

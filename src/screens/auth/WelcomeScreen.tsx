@@ -25,11 +25,13 @@ import { changeAppLanguage, getCurrentLanguage, AppLanguage } from '../../i18n';
 interface WelcomeScreenProps {
   onNavigateToLogin: () => void;
   onNavigateToRegister: () => void;
+  onContinueAsGuest?: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   onNavigateToLogin,
   onNavigateToRegister,
+  onContinueAsGuest,
 }) => {
   const { t } = useTranslation();
 
@@ -218,6 +220,20 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
                   {t('welcome.createAccountBtn', 'Create Account')}
                 </Text>
               </TouchableOpacity>
+
+              {/* Instant 5-Second Judge Demo Entry */}
+              {onContinueAsGuest && (
+                <TouchableOpacity
+                  style={styles.guestDemoBtn}
+                  onPress={onContinueAsGuest}
+                  activeOpacity={0.85}
+                >
+                  <MaterialCommunityIcons name="rocket-launch" size={18} color="#FFF" />
+                  <Text style={styles.guestDemoBtnText}>
+                    Continue as Guest • Astronaut Aysel (Day 214)
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
 
             {/* Legal / Policy Links */}
@@ -229,6 +245,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               <TouchableOpacity onPress={() => setIsTermsModalOpen(true)}>
                 <Text style={styles.legalLink}>{t('welcome.termsOfService', 'Terms & Conditions')}</Text>
               </TouchableOpacity>
+            </View>
+
+            {/* Official NASA 2026 Challenge Name Footer */}
+            <View style={styles.challengeFooter}>
+              <Text style={styles.challengeHeading}>OFFICIAL NASA 2026 CHALLENGE</Text>
+              <Text style={styles.challengeName}>
+                Space Biology Beyond Earth: Autonomous Health Monitoring & Medical Decision Support for Deep Space Missions
+              </Text>
             </View>
           </Animated.View>
         </View>
@@ -568,6 +592,44 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: COLORS.cyan,
     letterSpacing: 0.9,
+  },
+  guestDemoBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(37, 99, 235, 0.25)',
+    borderWidth: 1.5,
+    borderColor: COLORS.primaryBlue,
+    paddingVertical: 12,
+    borderRadius: 14,
+    marginTop: 4,
+  },
+  guestDemoBtnText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#FFF',
+    letterSpacing: 0.5,
+  },
+  challengeFooter: {
+    marginTop: SPACING.md,
+    paddingTop: SPACING.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    alignItems: 'center',
+  },
+  challengeHeading: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: COLORS.cyan,
+    letterSpacing: 0.8,
+    marginBottom: 2,
+  },
+  challengeName: {
+    fontSize: 10,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    lineHeight: 14,
   },
   legalRow: {
     flexDirection: 'row',

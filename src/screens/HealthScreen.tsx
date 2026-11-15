@@ -544,6 +544,62 @@ export const HealthScreen: React.FC<HealthScreenProps> = ({ onNavigateTab }) => 
         </TouchableOpacity>
       </View>
 
+      {/* SECTION 4: NASA HUMAN RISK CLINICAL DIAGNOSTICS */}
+      <Text style={styles.sectionTitle}>NASA HUMAN RISK CLINICAL DIAGNOSTICS</Text>
+      <View style={{ flexDirection: 'row', gap: 12, marginBottom: SPACING.lg }}>
+        {/* SANS Vision Check Card */}
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.surfaceCard,
+            borderWidth: 1,
+            borderColor: COLORS.borderSubtle,
+            borderRadius: 12,
+            padding: SPACING.md,
+          }}
+          onPress={() => onNavigateTab?.('sans')}
+          activeOpacity={0.8}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+            <MaterialCommunityIcons name="eye-check" size={18} color={COLORS.cyan} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 13, fontWeight: '700' }}>SANS Vision Check</Text>
+          </View>
+          <Text style={{ color: COLORS.textMuted, fontSize: 11, lineHeight: 15, marginBottom: 8 }}>
+            Tumbling E visual acuity, contrast test & microgravity globe flattening trend.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Text style={{ color: COLORS.cyan, fontSize: 11, fontWeight: '700' }}>START TEST</Text>
+            <MaterialCommunityIcons name="chevron-right" size={14} color={COLORS.cyan} />
+          </View>
+        </TouchableOpacity>
+
+        {/* Behavioral Check-in Card */}
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            backgroundColor: COLORS.surfaceCard,
+            borderWidth: 1,
+            borderColor: COLORS.borderSubtle,
+            borderRadius: 12,
+            padding: SPACING.md,
+          }}
+          onPress={() => onNavigateTab?.('behavioral')}
+          activeOpacity={0.8}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+            <MaterialCommunityIcons name="heart-pulse" size={18} color={COLORS.cyan} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 13, fontWeight: '700' }}>Behavioral Health</Text>
+          </View>
+          <Text style={{ color: COLORS.textMuted, fontSize: 11, lineHeight: 15, marginBottom: 8 }}>
+            30-sec isolation check-in, strain rule engine & 4-7-8 breathing pacer.
+          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <Text style={{ color: COLORS.cyan, fontSize: 11, fontWeight: '700' }}>CHECK IN</Text>
+            <MaterialCommunityIcons name="chevron-right" size={14} color={COLORS.cyan} />
+          </View>
+        </TouchableOpacity>
+      </View>
+
       {/* Data Input Modal */}
       <HealthDataModal
         visible={isDataModalOpen}

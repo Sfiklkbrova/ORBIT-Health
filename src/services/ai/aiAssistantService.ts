@@ -33,6 +33,8 @@ import { generatePredictiveAnalytics, PredictiveAnalyticsReport } from '../predi
 import { calculateFitnessAndRecovery, FitnessRecoveryAnalysis } from '../fitnessService';
 import { NasaRagCitation } from '../nasa/nasaKnowledgeBase';
 import { checkEmergencyProtocol, getLocalizedDisclaimer } from './emergencyProtocols';
+import { retrieveGroundedHealthContext } from './offlineContextRetriever';
+import { runLocalLlamaInference } from './localLlamaEngine';
 
 /**
  * Main entry point for the upgraded ORBIT AI Assistant.
@@ -417,21 +419,29 @@ export async function processAssistantQuery(
     }
   }
 
-  // 7. GENERAL CHAT / DEFAULT CAPABILITIES
+  // 7. GENERAL CHAT / CONVERSATIONAL ASSISTANT (LOCAL ON-DEVICE LLM & GROUNDED RAG)
   else {
-    let answer = `Commander **${profile.name}** (${profile.callsign}), I am your onboard **ORBIT AI Health Assistant**.\n\n`;
-    answer += `I am an autonomous, offline space medicine intelligence system equipped with:\n\n`;
-    answer += `1. **Dedicated Calculation Engine:** Computes running averages, percentage changes, baseline deltas, and cumulative radiation doses.\n`;
-    answer += `2. **NASA Open Science Data Repository (OSDR):** Connected to peer-reviewed space biology studies (*OSD-53, OSD-37, OSD-120, OSD-194*).\n`;
-    answer += `3. **NASA Human Research Roadmap (HRR):** Access to peer-reviewed risk reports for cardiovascular, sleep, bone, and hypercapnia countermeasures.\n`;
-    answer += `4. **Real Radiation Intelligence:** Tracks DosTel-2 & Liulin-5 benchmarks with strict separation of absorbed dose (µGy) and dose equivalent (µSv).\n`;
-    answer += `5. **Space Weather Station (DONKI):** Real-time monitoring of solar flares, CMEs, and radiation belt enhancements.\n\n`;
-    answer += `What would you like to calculate, analyze, or research today?`;
+    const groundedContext = await retrieveGroundedHealthContext(query, profile, lang);
+    const historyTurns = history.slice(-3).map((h) => ({
+      role: 'user' as const,
+      content: h.query,
+    }));
+
+    const llamaResult = await runLocalLlamaInference(
+      [
+        { role: 'system', content: groundedContext.groundedContextText },
+        ...historyTurns,
+        { role: 'user', content: query },
+      ],
+      onStreamChunk,
+      lang
+    );
 
     responsePayload = {
-      answer,
+      answer: llamaResult.text,
       category: 'general',
       intent: 'GENERAL_CHAT',
+      citations: groundedContext.nasaCitations,
       suggestedQuestions: [
         'Analyze my health today.',
         'Calculate my average heart rate over seven days.',
@@ -440,9 +450,9 @@ export async function processAssistantQuery(
         'Research NASA information about cardiovascular changes in space.',
       ],
       isOffline: true,
-      confidence: 0.99,
+      confidence: 0.98,
       processingTimeMs: Date.now() - startTime,
-      engineMode: 'AUTONOMOUS_LOCAL_ENGINE',
+      engineMode: 'LOCAL_LLM_QWEN_3B' as any,
     };
   }
 

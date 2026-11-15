@@ -571,6 +571,81 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ onNavigateTab 
           </TouchableOpacity>
         </View>
 
+        {/* NASA Deep Space Health Diagnostics Grid */}
+        <View style={{ flexDirection: 'row', gap: 10, marginVertical: SPACING.sm }}>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.surfaceCard,
+              borderRadius: 10,
+              padding: SPACING.sm,
+              borderWidth: 1,
+              borderColor: COLORS.borderSubtle,
+              alignItems: 'center',
+            }}
+            onPress={() => onNavigateTab('sans')}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="eye-check" size={20} color={COLORS.cyan} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 4 }}>SANS Vision</Text>
+            <Text style={{ color: COLORS.textMuted, fontSize: 9, textAlign: 'center' }}>Acuity Check</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.surfaceCard,
+              borderRadius: 10,
+              padding: SPACING.sm,
+              borderWidth: 1,
+              borderColor: COLORS.borderSubtle,
+              alignItems: 'center',
+            }}
+            onPress={() => onNavigateTab('behavioral')}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="heart-pulse" size={20} color={COLORS.cyan} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 4 }}>Behavioral</Text>
+            <Text style={{ color: COLORS.textMuted, fontSize: 9, textAlign: 'center' }}>30s Check-in</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.surfaceCard,
+              borderRadius: 10,
+              padding: SPACING.sm,
+              borderWidth: 1,
+              borderColor: COLORS.borderSubtle,
+              alignItems: 'center',
+            }}
+            onPress={() => onNavigateTab('radiation')}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="weather-sunny-alert" size={20} color={COLORS.statusWarning} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 4 }}>Radiation</Text>
+            <Text style={{ color: COLORS.textMuted, fontSize: 9, textAlign: 'center' }}>Shelter Advisor</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: COLORS.surfaceCard,
+              borderRadius: 10,
+              padding: SPACING.sm,
+              borderWidth: 1,
+              borderColor: COLORS.borderSubtle,
+              alignItems: 'center',
+            }}
+            onPress={() => onNavigateTab('control')}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons name="satellite-uplink" size={20} color={COLORS.cyan} />
+            <Text style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 4 }}>Comms Link</Text>
+            <Text style={{ color: COLORS.textMuted, fontSize: 9, textAlign: 'center' }}>Flight Surgeon</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Earth Impact / Beyond Space Navigation Card */}
         <TouchableOpacity
           style={styles.beyondSpaceCard}

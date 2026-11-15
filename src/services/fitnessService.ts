@@ -31,42 +31,22 @@ let exerciseSessionStore: ExerciseSessionLog[] = [
     id: 'fit_01',
     timestamp: new Date().toISOString(),
     type: 'ARED Resistive Exercise',
-    durationMinutes: 60,
+    durationMinutes: 90,
     intensity: 'High',
     preWorkoutFatigue: 3,
     postWorkoutFatigue: 5,
     recoveryDurationHours: 1.5,
     peakHeartRate: 142,
-    notes: 'Squats (180 kg equiv), Romanian deadlifts, bench press. Excellent musculoskeletal loading.',
-  },
-  {
-    id: 'fit_02',
-    timestamp: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
-    type: 'CEVIS Cycle Ergometer',
-    durationMinutes: 45,
-    intensity: 'High',
-    preWorkoutFatigue: 2,
-    postWorkoutFatigue: 5,
-    recoveryDurationHours: 2.0,
-    peakHeartRate: 156,
-    notes: 'High-intensity interval protocol. Autonomic recovery to baseline resting HR within 22 minutes.',
-  },
-  {
-    id: 'fit_03',
-    timestamp: new Date(Date.now() - 48 * 3600 * 1000).toISOString(),
-    type: 'T2 Space Treadmill',
-    durationMinutes: 40,
-    intensity: 'Moderate',
-    preWorkoutFatigue: 3,
-    postWorkoutFatigue: 4,
-    recoveryDurationHours: 1.0,
-    peakHeartRate: 138,
-    notes: 'Bungee harness loading set to 75% body weight equivalent. Axial skeletal compression nominal.',
+    notes: 'Squats (180 kg equiv), Romanian deadlifts, bench press. Prescribed 90-minute ARED protocol completed.',
   },
 ];
 
 export function getExerciseSessions(): ExerciseSessionLog[] {
   return [...exerciseSessionStore];
+}
+
+export function deleteExerciseSession(id: string): void {
+  exerciseSessionStore = exerciseSessionStore.filter((s) => s.id !== id);
 }
 
 export function logNewExerciseSession(session: Omit<ExerciseSessionLog, 'id'>): ExerciseSessionLog {
